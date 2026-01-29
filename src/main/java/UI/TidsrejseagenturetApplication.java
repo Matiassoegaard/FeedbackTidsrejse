@@ -1,11 +1,14 @@
 package UI;
 
+import Data.DB;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 
 public class TidsrejseagenturetApplication extends Application {
     @Override
@@ -18,6 +21,9 @@ public class TidsrejseagenturetApplication extends Application {
     }
 
     public static void main(String[] args) {
+
         launch();
     }
+
+
 }

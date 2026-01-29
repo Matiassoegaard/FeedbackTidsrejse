@@ -5,9 +5,9 @@ import java.sql.DriverManager;
 
 public class DB {
     private static final String URL =
-            "jdbc:mysql://localhost:3306/sql_first_tabel?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+            "jdbc:mysql://localhost:3306/tidsrejseagenturet?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
     private static final String USER = "root";
-    private static final String PASS = "Kage";
+    private static final String PASS = "Kage!";
 
     /**
      * Opretter en forbindelse til databasen.
@@ -16,4 +16,6 @@ public class DB {
     public Connection get() throws Exception {
         return DriverManager.getConnection(URL, USER, PASS);
     }
+
+
 }
