@@ -37,10 +37,21 @@ public class TidsrejseagenturetController implements Initializable {
     private TextField customerEmail;
 
     @FXML
+    private TextField editCustomerName;
+    @FXML
+    private TextField editCustomerEmail;
+    @FXML
     private Button deleteCustomerButton;
     @FXML
     private Button bookButton;
-
+    @FXML
+    private Button editCustomerButton;
+    @FXML
+    private Button editNameButton;
+    @FXML
+    private Button editEmailButton;
+    @FXML
+    private Button doneEdittingButton;
     @FXML
     private ComboBox<Kunder> customerComboBox;
     @FXML
@@ -49,6 +60,7 @@ public class TidsrejseagenturetController implements Initializable {
     private ComboBox<TidsPeriode> periodeComboBox;
     @FXML
     private ComboBox<Tidsresjemaskiner> machineComboBox;
+
 
     private ObservableList<Kunder> kunderListe = FXCollections.observableArrayList();
     private ObservableList<Guide> guideListe = FXCollections.observableArrayList();
@@ -104,7 +116,7 @@ public class TidsrejseagenturetController implements Initializable {
             guideListe.addAll(guideList);
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
@@ -117,7 +129,7 @@ public class TidsrejseagenturetController implements Initializable {
             periodListe.addAll(periodList);
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
@@ -129,7 +141,7 @@ public class TidsrejseagenturetController implements Initializable {
             machineListe.clear();
             machineListe.addAll(machineList);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
@@ -144,7 +156,7 @@ public class TidsrejseagenturetController implements Initializable {
     }
 
     @FXML
-    protected void onBookButtonClick(ActionEvent event) {
+    protected void onBookButtonClick() {
         try {
             Kunder selectedKunde = customerComboBox.getSelectionModel().getSelectedItem();
             Guide selectedGuide = guideComboBox.getSelectionModel().getSelectedItem();
@@ -152,24 +164,23 @@ public class TidsrejseagenturetController implements Initializable {
             TidsPeriode selectedPeriod = periodeComboBox.getSelectionModel().getSelectedItem();
 
             kundeAdmin.opretBooking(selectedKunde.getId(),selectedGuide.getId(),selectedMaskine.getId(),selectedPeriod.getId());
-
-            showAlert(Alert.AlertType.CONFIRMATION, "Booking Complete!");
             loadMaskine();
+            showAlert(Alert.AlertType.CONFIRMATION, "Booking Complete!");
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
     @FXML
-    protected void onCreateCustomerButtonClick(ActionEvent event){
+    protected void onCreateCustomerButtonClick(){
         String name = kundeNavn.getText();
         String email = customerEmail.getText();
 
         try{
             if(!name.isEmpty() && !email.isEmpty()){
                 kundeAdmin.opretKunde(name,email);
-//                Kunder newKunde = new Kunder(name, email);
                 loadCustomer();
+                showAlert(Alert.AlertType.CONFIRMATION, "Creation Complete!");
             } else if (name.isEmpty() || email.isEmpty()) {
                 showAlert(Alert.AlertType.WARNING, "Udfyld venligst felterne");
             }
@@ -179,6 +190,45 @@ public class TidsrejseagenturetController implements Initializable {
         }catch(Exception e){
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    protected void onEditNameButtonClick(){
+        try{
+            Kunder selectedKunde = customerComboBox.getSelectionModel().getSelectedItem();
+            String newName = editCustomerName.getText();
+            if(!newName.isEmpty()){
+                kundeAdmin.redigerKundeNavn(selectedKunde,newName);
+            }
+            loadCustomer();
+            if(newName.isEmpty()){
+                showAlert(Alert.AlertType.WARNING,"Skriv venligst et navn");
+            }else{
+                showAlert(Alert.AlertType.CONFIRMATION, "Ændring Complete!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    @FXML
+    protected void onEditEmailButtonClick(){
+        try{
+            Kunder selectedKunde = customerComboBox.getSelectionModel().getSelectedItem();
+            String newEmail = editCustomerEmail.getText();
+            if(!newEmail.isEmpty()){
+                kundeAdmin.redigerKundeEmail(selectedKunde,newEmail);
+            }
+            loadCustomer();
+            if (newEmail.isEmpty()){
+                showAlert(Alert.AlertType.WARNING,"Skriv venligst en email");
+            } else {
+                showAlert(Alert.AlertType.CONFIRMATION, "Ændring Complete!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @FXML
@@ -206,13 +256,32 @@ public class TidsrejseagenturetController implements Initializable {
             kundeAdmin.sletKunde(selectedKunde);
 
             loadCustomer();
+            showAlert(Alert.AlertType.CONFIRMATION, "Delete Complete!");
         }catch(Exception e){
             e.printStackTrace();
         }
     }
 
+    @FXML
+    protected void onEditCustomerButtonClick(ActionEvent event) {
+        try {
+            SceneSwitcher.switchScene(event, "EditCustomer-view.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-            //songList.remove(songListView.getSelectionModel().getSelectedIndex());
+    @FXML
+    protected void doneEdittingButton(ActionEvent event) {
+        try {
+            SceneSwitcher.switchScene(event, "Customer.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
     // Hjælpe metode til visning af alert dialog.
     private void showAlert(Alert.AlertType type, String besked) {
         Alert alert = new Alert(type, besked, ButtonType.OK);

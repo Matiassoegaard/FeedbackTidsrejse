@@ -9,7 +9,6 @@
        <ComboBox fx:id="periodeComboBox" layoutX="55.0" layoutY="150" prefWidth="150.0" promptText="Tidsperiode" />
        <ComboBox fx:id="machineComboBox" layoutX="55.0" layoutY="200" prefWidth="150.0" promptText="Maskine" />
        <ComboBox fx:id="guideComboBox" layoutX="55.0" layoutY="250" prefWidth="150.0" promptText="Guide" />
-       <ComboBox fx:id="bookingComboBox" layoutX="55.0" layoutY="350" prefWidth="150.0" promptText="Booking Liste" />
       <Button fx:id="bookButton" onAction="#onBookButtonClick" layoutX="467.0" layoutY="338.0" mnemonicParsing="false" text="Book" />
        <Button fx:id="returnButton" layoutX="14.0" layoutY="338.0" onAction="#onReturnButtonClick" text="Tilbage" />
    </children>

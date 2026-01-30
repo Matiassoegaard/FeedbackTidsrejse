@@ -17,7 +17,7 @@ private final DB db;
 public  Kundeadministration(DB db) {
     this.db = db;
 }
-
+    //Metode til at få hentede kunde information fra mysql
     public ObservableList<Kunder> getCustomerInformation() throws Exception {
         ObservableList<Kunder> kunderList = FXCollections.observableArrayList();
         String sql = "Select * from kunder";
@@ -36,6 +36,7 @@ public  Kundeadministration(DB db) {
         }
         return kunderList;
     }
+    //Metode til at få hentede guide information fra mysql
     public ObservableList<Guide> getGuideInformation() throws Exception {
         ObservableList<Guide> guideList = FXCollections.observableArrayList();
         String sql = "Select * from guide";
@@ -55,6 +56,7 @@ public  Kundeadministration(DB db) {
         }
         return guideList;
     }
+    //Metode til at få hentede tidsmaskine information fra mysql
     public ObservableList<Tidsresjemaskiner> getTimeMachineInformation() throws Exception {
         ObservableList<Tidsresjemaskiner> machineList = FXCollections.observableArrayList();
         String sql = "Select * from tidsmaskine where kapacitet > 0";
@@ -75,7 +77,7 @@ public  Kundeadministration(DB db) {
         }
         return machineList;
     }
-
+    //Metode til at få hentede tidsperiode information fra mysql
     public ObservableList<TidsPeriode> getTimePeriodInformation() throws Exception {
         ObservableList<TidsPeriode> timePeriod = FXCollections.observableArrayList();
         String sql = "Select * from tidsperiode";
@@ -96,7 +98,7 @@ public  Kundeadministration(DB db) {
     }
 
 
-
+    //Medtode til at oprette en kunde i mysql
     public int opretKunde (String name, String email) throws Exception {
         String sql = "INSERT INTO kunder (navn,email) VALUES (?, ?)";
         try (Connection c = db.get();
@@ -111,11 +113,11 @@ public  Kundeadministration(DB db) {
             return rows;
         }
     }
-
+    //Metode til at oprette booking i mysql
     public int opretBooking (int kunderId, int guideId, int maskineId, int periodeId) throws Exception {
         String sql = "INSERT INTO booking (kundeID,tidsmaskineID,tidsperiodeID, guideID) VALUES (?,?,?,?)";
         String updateKapacitet = "UPDATE tidsmaskine SET kapacitet = kapacitet - 1 WHERE id = ?";
-        String updateStatus = "UPDATE tidsmaskine WHERE id = ? AND kapacitet = 0";
+        String updateStatus = "UPDATE tidsmaskine set status = 'Ikke tilgængelig' WHERE id = ? AND kapacitet = 0";
 
         try (Connection c = db.get();
             PreparedStatement psBooking = c.prepareStatement(sql);
@@ -140,7 +142,7 @@ public  Kundeadministration(DB db) {
                 return rows;
         }
     }
-
+    //Metode til at slette en kunde fra mysql
     public int sletKunde(Kunder kunder) throws Exception {
         String sql = "DELETE FROM kunder WHERE id = ?";
         try (Connection c = db.get();
@@ -151,23 +153,24 @@ public  Kundeadministration(DB db) {
             return rows;
         }
     }
-
-    public int redigerKundeEmail(Kunder kunder) throws Exception {
+    //Metode til at kunne redigere kundes email i mysql
+    public int redigerKundeEmail(Kunder kunder, String newEmail) throws Exception {
         String sql = "update kunder set email = ? where id = ?";
         try (Connection c = db.get();
         PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setString(1, kunder.getEmail());
+            ps.setString(1, newEmail);
             ps.setInt(2, kunder.getId());
             int rows = ps.executeUpdate();
             return rows;
         }
     }
-
-    public int redigerKundeNavn(Kunder kunder) throws Exception {
+    //Metode til at kunne redigere kundes navn i mysql
+    public int redigerKundeNavn(Kunder kunder, String newName) throws Exception {
         String sql = "Update kunder set navn =  ? where id = ?";
+
         try (Connection c = db.get();
              PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setString(1, kunder.getNavn());
+            ps.setString(1, newName);
             ps.setInt(2, kunder.getId());
             int rows = ps.executeUpdate();
             return rows;

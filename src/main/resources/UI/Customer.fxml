@@ -7,8 +7,8 @@
     <TextField fx:id="kundeNavn" layoutX="87.0" layoutY="150.0" promptText="Fornavn" />
     <TextField fx:id="customerEmail" layoutX="87.0" layoutY="200.0" promptText="Email" />
    <Button fx:id="createCustomerButton" layoutX="134.0" layoutY="247.0" mnemonicParsing="false" onAction="#onCreateCustomerButtonClick" text="Opret kunde" />
-    <Button fx:id="deleteCustomerButton" layoutX="418.0" layoutY="247.0" mnemonicParsing="false" onAction="#onDeleteCustomerButtonClick" text="Slet" />
+    <Button fx:id="deleteCustomerButton" layoutX="414.0" layoutY="247.0" mnemonicParsing="false" onAction="#onDeleteCustomerButtonClick" text="Slet" />
     <Button fx:id="continueButton" layoutX="513.0" layoutY="347.0" onAction="#onContinueButtonClick" text="Forsæt" />
-    <Button fx:id="RedigerKunde" 
+    <Button fx:id="editCustomerButton" onAction="#onEditCustomerButtonClick" layoutX="378.0" layoutY="347.0" text="Kunde redigering" />
     <ComboBox fx:id="customerComboBox" layoutX="378.0" layoutY="150.0" promptText="Kunder" />
 </AnchorPane>
