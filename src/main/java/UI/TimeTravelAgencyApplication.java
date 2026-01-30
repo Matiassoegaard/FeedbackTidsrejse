@@ -10,12 +10,12 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 
-public class TidsrejseagenturetApplication extends Application {
+public class TimeTravelAgencyApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(TidsrejseagenturetApplication.class.getResource("Tidsrejseagenturet-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(TimeTravelAgencyApplication.class.getResource("Tidsrejseagenturet-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
+        stage.setTitle("Tidsrejseagenturet");
         stage.setScene(scene);
         stage.show();
     }

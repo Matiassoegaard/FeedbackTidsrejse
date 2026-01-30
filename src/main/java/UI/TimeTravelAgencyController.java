@@ -1,11 +1,11 @@
 package UI;
 
 import Data.DB;
-import Logic.Kundeadministration;
+import Logic.CustomerAdminitration;
 import Model.Guide;
-import Model.Kunder;
-import Model.TidsPeriode;
-import Model.Tidsresjemaskiner;
+import Model.Customer;
+import Model.Timeperiod;
+import Model.Timemachine;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,7 +22,7 @@ import java.net.URL;
 import java.time.Period;
 import java.util.ResourceBundle;
 
-public class TidsrejseagenturetController implements Initializable {
+public class TimeTravelAgencyController implements Initializable {
 
     @FXML
     private Button bookingButton;
@@ -31,7 +31,7 @@ public class TidsrejseagenturetController implements Initializable {
     private Button createCustomerButton;
 
     @FXML
-    private TextField kundeNavn;
+    private TextField customerNameTextField;
 
     @FXML
     private TextField customerEmail;
@@ -53,22 +53,22 @@ public class TidsrejseagenturetController implements Initializable {
     @FXML
     private Button doneEdittingButton;
     @FXML
-    private ComboBox<Kunder> customerComboBox;
+    private ComboBox<Customer> customerComboBox;
     @FXML
     private ComboBox<Guide> guideComboBox;
     @FXML
-    private ComboBox<TidsPeriode> periodeComboBox;
+    private ComboBox<Timeperiod> periodeComboBox;
     @FXML
-    private ComboBox<Tidsresjemaskiner> machineComboBox;
+    private ComboBox<Timemachine> machineComboBox;
 
 
-    private ObservableList<Kunder> kunderListe = FXCollections.observableArrayList();
-    private ObservableList<Guide> guideListe = FXCollections.observableArrayList();
-    private ObservableList<TidsPeriode> periodListe = FXCollections.observableArrayList();
-    private ObservableList<Tidsresjemaskiner> machineListe = FXCollections.observableArrayList();
+    private ObservableList<Customer> customerList = FXCollections.observableArrayList();
+    private ObservableList<Guide> guideList = FXCollections.observableArrayList();
+    private ObservableList<Timeperiod> periodList = FXCollections.observableArrayList();
+    private ObservableList<Timemachine> machineList = FXCollections.observableArrayList();
 
     private DB db;
-    private Kundeadministration kundeAdmin;
+    private CustomerAdminitration CustomerAdminitration;
 
     private Guide guide;
     private Period period;
@@ -77,15 +77,15 @@ public class TidsrejseagenturetController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         try{
            db = new DB();
-           kundeAdmin = new Kundeadministration(db);
-           customerComboBox.setItems(kunderListe);
+           CustomerAdminitration = new CustomerAdminitration(db);
+           customerComboBox.setItems(customerList);
             loadCustomer();
-           guideComboBox.setItems(guideListe);
+           guideComboBox.setItems(guideList);
             loadGuide();
-           periodeComboBox.setItems(periodListe);
+           periodeComboBox.setItems(periodList);
             loadPeriod();
-           machineComboBox.setItems(machineListe);
-           loadMaskine();
+           machineComboBox.setItems(machineList);
+           loadMachine();
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -97,9 +97,9 @@ public class TidsrejseagenturetController implements Initializable {
     private void loadCustomer(){
         try {
 
-            ObservableList<Kunder> kunder = kundeAdmin.getCustomerInformation();
-            kunderListe.clear();
-            kunderListe.addAll(kunder);
+            ObservableList<Customer> customer = CustomerAdminitration.getCustomerInformation();
+            customerList.clear();
+            customerList.addAll(customer);
 
 
         } catch (Exception e) {
@@ -111,9 +111,9 @@ public class TidsrejseagenturetController implements Initializable {
     private void loadGuide() {
         try {
 
-            ObservableList<Guide> guideList = kundeAdmin.getGuideInformation();
-            guideListe.clear();
-            guideListe.addAll(guideList);
+            ObservableList<Guide> guideList = CustomerAdminitration.getGuideInformation();
+            this.guideList.clear();
+            this.guideList.addAll(guideList);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -124,9 +124,9 @@ public class TidsrejseagenturetController implements Initializable {
     private void loadPeriod() {
         try {
 
-            ObservableList<TidsPeriode> periodList = kundeAdmin.getTimePeriodInformation();
-            periodListe.clear();
-            periodListe.addAll(periodList);
+            ObservableList<Timeperiod> periodList = CustomerAdminitration.getTimePeriodInformation();
+            this.periodList.clear();
+            this.periodList.addAll(periodList);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,12 +134,12 @@ public class TidsrejseagenturetController implements Initializable {
     }
 
     // Maskine
-    private void loadMaskine() {
+    private void loadMachine() {
         try {
 
-            ObservableList<Tidsresjemaskiner> machineList = kundeAdmin.getTimeMachineInformation();
-            machineListe.clear();
-            machineListe.addAll(machineList);
+            ObservableList<Timemachine> machineList = CustomerAdminitration.getTimeMachineInformation();
+            this.machineList.clear();
+            this.machineList.addAll(machineList);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -158,13 +158,13 @@ public class TidsrejseagenturetController implements Initializable {
     @FXML
     protected void onBookButtonClick() {
         try {
-            Kunder selectedKunde = customerComboBox.getSelectionModel().getSelectedItem();
+            Customer selectedKunde = customerComboBox.getSelectionModel().getSelectedItem();
             Guide selectedGuide = guideComboBox.getSelectionModel().getSelectedItem();
-            Tidsresjemaskiner selectedMaskine = machineComboBox.getSelectionModel().getSelectedItem();
-            TidsPeriode selectedPeriod = periodeComboBox.getSelectionModel().getSelectedItem();
+            Timemachine selectedMaskine = machineComboBox.getSelectionModel().getSelectedItem();
+            Timeperiod selectedPeriod = periodeComboBox.getSelectionModel().getSelectedItem();
 
-            kundeAdmin.opretBooking(selectedKunde.getId(),selectedGuide.getId(),selectedMaskine.getId(),selectedPeriod.getId());
-            loadMaskine();
+            CustomerAdminitration.createBooking(selectedKunde.getId(),selectedGuide.getId(),selectedMaskine.getId(),selectedPeriod.getId());
+            loadMachine();
             showAlert(Alert.AlertType.CONFIRMATION, "Booking Complete!");
         } catch (Exception e) {
             e.printStackTrace();
@@ -173,12 +173,12 @@ public class TidsrejseagenturetController implements Initializable {
 
     @FXML
     protected void onCreateCustomerButtonClick(){
-        String name = kundeNavn.getText();
+        String name = customerNameTextField.getText();
         String email = customerEmail.getText();
 
         try{
             if(!name.isEmpty() && !email.isEmpty()){
-                kundeAdmin.opretKunde(name,email);
+                CustomerAdminitration.createCustomer(name,email);
                 loadCustomer();
                 showAlert(Alert.AlertType.CONFIRMATION, "Creation Complete!");
             } else if (name.isEmpty() || email.isEmpty()) {
@@ -195,10 +195,10 @@ public class TidsrejseagenturetController implements Initializable {
     @FXML
     protected void onEditNameButtonClick(){
         try{
-            Kunder selectedKunde = customerComboBox.getSelectionModel().getSelectedItem();
+            Customer selectedCustomer = customerComboBox.getSelectionModel().getSelectedItem();
             String newName = editCustomerName.getText();
             if(!newName.isEmpty()){
-                kundeAdmin.redigerKundeNavn(selectedKunde,newName);
+                CustomerAdminitration.editCustomerName(selectedCustomer,newName);
             }
             loadCustomer();
             if(newName.isEmpty()){
@@ -214,10 +214,10 @@ public class TidsrejseagenturetController implements Initializable {
     @FXML
     protected void onEditEmailButtonClick(){
         try{
-            Kunder selectedKunde = customerComboBox.getSelectionModel().getSelectedItem();
+            Customer selectedCustomer = customerComboBox.getSelectionModel().getSelectedItem();
             String newEmail = editCustomerEmail.getText();
             if(!newEmail.isEmpty()){
-                kundeAdmin.redigerKundeEmail(selectedKunde,newEmail);
+                CustomerAdminitration.editCustomerEmail(selectedCustomer,newEmail);
             }
             loadCustomer();
             if (newEmail.isEmpty()){
@@ -252,8 +252,8 @@ public class TidsrejseagenturetController implements Initializable {
     @FXML
     protected void onDeleteCustomerButtonClick() {
         try {
-            Kunder selectedKunde = customerComboBox.getSelectionModel().getSelectedItem();
-            kundeAdmin.sletKunde(selectedKunde);
+            Customer selectedCustomer = customerComboBox.getSelectionModel().getSelectedItem();
+            CustomerAdminitration.deleteCustomer(selectedCustomer);
 
             loadCustomer();
             showAlert(Alert.AlertType.CONFIRMATION, "Delete Complete!");
@@ -283,8 +283,8 @@ public class TidsrejseagenturetController implements Initializable {
 
 
     // Hjælpe metode til visning af alert dialog.
-    private void showAlert(Alert.AlertType type, String besked) {
-        Alert alert = new Alert(type, besked, ButtonType.OK);
+    private void showAlert(Alert.AlertType type, String message) {
+        Alert alert = new Alert(type, message, ButtonType.OK);
         alert.setHeaderText(null);
         alert.showAndWait();
     }

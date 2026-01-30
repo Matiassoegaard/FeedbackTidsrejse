@@ -2,17 +2,17 @@ package Model;
 
 public class Guide {
     private int id;
-    private String navn;
-    private String specialitet;
+    private String name;
+    private String speciality;
 
-    public Guide (String navn, String specialitet, int id){
-        this.navn = navn;
-        this.specialitet = specialitet;
+    public Guide (String name, String speciality, int id){
+        this.name = name;
+        this.speciality = speciality;
         this.id = id;
     }
-    public Guide (String navn, String specialitet){
-        this.navn = navn;
-        this.specialitet = specialitet;
+    public Guide (String name, String speciality){
+        this.name = name;
+        this.speciality = speciality;
     }
 
     public int getId() {
@@ -21,6 +21,6 @@ public class Guide {
 
     @Override
     public String toString() {
-        return navn + " - " +specialitet;
+        return name + " - " + speciality;
     }
 }

@@ -1,25 +1,25 @@
 package Model;
 
-public class Kunder {
-    private String navn;
+public class Customer {
+    private String name;
     private String email;
     private int id;
 
-    public Kunder(String navn, String email, int id) {
-        this.navn = navn;
+    public Customer(String name, String email, int id) {
+        this.name = name;
         this.email = email;
         this.id = id;
     }
-    public Kunder(String navn, String email) {
-        this.navn = navn;
+    public Customer(String name, String email) {
+        this.name = name;
         this.email = email;
     }
 
-    public String getNavn() {
-        return navn;
+    public String getName() {
+        return name;
     }
-    public void setNavn(String navn) {
-        this.navn = navn;
+    public void setName(String name) {
+        this.name = name;
     }
     public String getEmail() {
         return email;
@@ -36,6 +36,6 @@ public class Kunder {
 
     @Override
     public String toString() {
-        return navn + " " + email;
+        return name + " " + email;
     }
 }
