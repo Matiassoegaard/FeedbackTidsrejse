@@ -2,6 +2,7 @@ package UI;
 
 import Data.DB;
 import Logic.Kundeadministration;
+import Model.Guide;
 import Model.Kunder;
 import Model.TidsPeriode;
 import Model.Tidsresjemaskiner;
@@ -13,19 +14,22 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.fxml.Initializable;
+import javafx.scene.control.*;
+
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Period;
 import java.util.ResourceBundle;
 
 public class TidsrejseagenturetController implements Initializable {
-    @FXML
-    private Label welcomeText;
 
     @FXML
     private Button bookingButton;
+
     @FXML
     private Button createCustomerButton;
+
     @FXML
     private TextField kundeNavn;
 
@@ -54,6 +58,9 @@ public class TidsrejseagenturetController implements Initializable {
     private DB db;
     private Kundeadministration kundeAdmin;
 
+    private Guide guide;
+    private Period period;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try{
@@ -74,6 +81,7 @@ public class TidsrejseagenturetController implements Initializable {
     }
 
 
+    // Kunde
     private void loadCustomer(){
         try {
 
@@ -86,9 +94,45 @@ public class TidsrejseagenturetController implements Initializable {
             e.printStackTrace();
         }
     }
-   // ObservableList<String> timePeriods = FXCollections.observableArrayList("Dinosaurernes æra", "Middelalderen", "Fremtiden");
-    // Binding til en ComboBox
-    //timePeriodComboBox.setItems(timePeriods);
+
+    // Guide
+    private void loadGuide() {
+        try {
+
+            ObservableList<Guide> guideList = kundeAdmin.getGuideInformation();
+            guideListe.clear();
+            guideListe.addAll(guideList);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Periode
+    private void loadPeriod() {
+        try {
+
+            ObservableList<TidsPeriode> periodList = kundeAdmin.getTimePeriodInformation();
+            periodListe.clear();
+            periodListe.addAll(periodList);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Maskine
+    private void loadMaskine() {
+        try {
+
+            ObservableList<Tidsresjemaskiner> machineList = kundeAdmin.getTimeMachineInformation();
+            machineListe.clear();
+            machineListe.addAll(machineList);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     @FXML
     protected void onBookingButtonClick(ActionEvent event){
@@ -98,6 +142,24 @@ public class TidsrejseagenturetController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    protected void onBookButtonClick(ActionEvent event) {
+        try {
+            Kunder selectedKunde = customerComboBox.getSelectionModel().getSelectedItem();
+            Guide selectedGuide = guideComboBox.getSelectionModel().getSelectedItem();
+            Tidsresjemaskiner selectedMaskine = machineComboBox.getSelectionModel().getSelectedItem();
+            TidsPeriode selectedPeriod = periodeComboBox.getSelectionModel().getSelectedItem();
+
+            kundeAdmin.opretBooking(selectedKunde.getId(),selectedGuide.getId(),selectedMaskine.getId(),selectedPeriod.getId());
+
+            showAlert(Alert.AlertType.CONFIRMATION, "Booking Complete!");
+            loadMaskine();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @FXML
     protected void onCreateCustomerButtonClick(ActionEvent event){
         String name = kundeNavn.getText();
