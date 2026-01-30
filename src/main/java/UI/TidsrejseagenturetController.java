@@ -3,13 +3,14 @@ package UI;
 import Data.DB;
 import Logic.Kundeadministration;
 import Model.Kunder;
+import Model.TidsPeriode;
+import Model.Tidsresjemaskiner;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.fxml.Initializable;
 
@@ -27,8 +28,28 @@ public class TidsrejseagenturetController implements Initializable {
     private Button createCustomerButton;
     @FXML
     private TextField kundeNavn;
+
+    @FXML
+    private TextField customerEmail;
+
+    @FXML
+    private Button deleteCustomerButton;
+    @FXML
+    private Button bookButton;
+
     @FXML
     private ComboBox<Kunder> customerComboBox;
+    @FXML
+    private ComboBox<Guide> guideComboBox;
+    @FXML
+    private ComboBox<TidsPeriode> periodeComboBox;
+    @FXML
+    private ComboBox<Tidsresjemaskiner> machineComboBox;
+
+    private ObservableList<Kunder> kunderListe = FXCollections.observableArrayList();
+    private ObservableList<Guide> guideListe = FXCollections.observableArrayList();
+    private ObservableList<TidsPeriode> periodListe = FXCollections.observableArrayList();
+    private ObservableList<Tidsresjemaskiner> machineListe = FXCollections.observableArrayList();
 
     private DB db;
     private Kundeadministration kundeAdmin;
@@ -38,16 +59,28 @@ public class TidsrejseagenturetController implements Initializable {
         try{
            db = new DB();
            kundeAdmin = new Kundeadministration(db);
-           loadCustomer();
+           customerComboBox.setItems(kunderListe);
+            loadCustomer();
+           guideComboBox.setItems(guideListe);
+            loadGuide();
+           periodeComboBox.setItems(periodListe);
+            loadPeriod();
+           machineComboBox.setItems(machineListe);
+           loadMaskine();
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
+
     private void loadCustomer(){
         try {
+
             ObservableList<Kunder> kunder = kundeAdmin.getCustomerInformation();
-            customerComboBox.setItems(kunder);
+            kunderListe.clear();
+            kunderListe.addAll(kunder);
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -58,7 +91,7 @@ public class TidsrejseagenturetController implements Initializable {
     //timePeriodComboBox.setItems(timePeriods);
 
     @FXML
-    protected void onBookingButtonClick(ActionEvent event) throws IOException {
+    protected void onBookingButtonClick(ActionEvent event){
         try{
             SceneSwitcher.switchScene(event,"Customer.fxml");
         }catch(IOException e){
@@ -66,13 +99,65 @@ public class TidsrejseagenturetController implements Initializable {
         }
     }
     @FXML
-    protected void onCreateCustomerButtonClick(ActionEvent event) throws IOException {
+    protected void onCreateCustomerButtonClick(ActionEvent event){
+        String name = kundeNavn.getText();
+        String email = customerEmail.getText();
+
         try{
-            SceneSwitcher.switchScene(event,"Booking-view.fxml");
-        }catch(IOException e){
+            if(!name.isEmpty() && !email.isEmpty()){
+                kundeAdmin.opretKunde(name,email);
+//                Kunder newKunde = new Kunder(name, email);
+                loadCustomer();
+            } else if (name.isEmpty() || email.isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Udfyld venligst felterne");
+            }
+
+
+
+        }catch(Exception e){
             e.printStackTrace();
         }
     }
+
+    @FXML
+    protected void onContinueButtonClick(ActionEvent event) {
+        try {
+            SceneSwitcher.switchScene(event,"Booking-view.fxml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    protected void onReturnButtonClick(ActionEvent event) {
+        try {
+            SceneSwitcher.switchScene(event,"Customer.fxml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    protected void onDeleteCustomerButtonClick() {
+        try {
+            Kunder selectedKunde = customerComboBox.getSelectionModel().getSelectedItem();
+            kundeAdmin.sletKunde(selectedKunde);
+
+            loadCustomer();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+            //songList.remove(songListView.getSelectionModel().getSelectedIndex());
+    // Hjælpe metode til visning af alert dialog.
+    private void showAlert(Alert.AlertType type, String besked) {
+        Alert alert = new Alert(type, besked, ButtonType.OK);
+        alert.setHeaderText(null);
+        alert.showAndWait();
+    }
+
 
 
 

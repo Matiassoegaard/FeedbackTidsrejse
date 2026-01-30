@@ -6,9 +6,11 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" fx:controller="UI.TidsrejseagenturetController" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ComboBox fx:id="customerComboBox" layoutX="55.0" layoutY="100" prefWidth="150.0" promptText="Kunde" />
-       <ComboBox layoutX="55.0" layoutY="150" prefWidth="150.0" promptText="Tidsperiode" />
-       <ComboBox layoutX="55.0" layoutY="200" prefWidth="150.0" promptText="Maskine" />
-       <ComboBox layoutX="55.0" layoutY="250" prefWidth="150.0" promptText="Guide" />
-      <Button layoutX="467.0" layoutY="338.0" mnemonicParsing="false" text="Book" />
+       <ComboBox fx:id="periodeComboBox" layoutX="55.0" layoutY="150" prefWidth="150.0" promptText="Tidsperiode" />
+       <ComboBox fx:id="machineComboBox" layoutX="55.0" layoutY="200" prefWidth="150.0" promptText="Maskine" />
+       <ComboBox fx:id="guideComboBox" layoutX="55.0" layoutY="250" prefWidth="150.0" promptText="Guide" />
+       <ComboBox fx:id="bookingComboBox" layoutX="55.0" layoutY="350" prefWidth="150.0" promptText="Booking Liste" />
+      <Button fx:id="bookButton" onAction="#onBookButtonClick" layoutX="467.0" layoutY="338.0" mnemonicParsing="false" text="Book" />
+       <Button fx:id="returnButton" layoutX="14.0" layoutY="338.0" onAction="#onReturnButtonClick" text="Tilbage" />
    </children>
 </AnchorPane>

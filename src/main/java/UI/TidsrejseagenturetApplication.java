@@ -21,9 +21,19 @@ public class TidsrejseagenturetApplication extends Application {
     }
 
     public static void main(String[] args) {
-
+        testConnection();
         launch();
     }
 
-
+    public static void testConnection() {
+       DB db = new DB();
+        try (Connection c = db.get()) {
+            DatabaseMetaData md = c.getMetaData();
+            System.out.println("✅ Forbindelse OK: " + md.getURL());
+            System.out.println("   Driver: " + md.getDriverName() + " - " + md.getDriverVersion());
+        } catch (Exception e) {
+            System.out.println("❌ Forbindelse FEJL: " + e.getMessage());
+            System.out.println("Tip: Tjek URL/USER/PASS og at MySQL kører.");
+        }
+    }
 }

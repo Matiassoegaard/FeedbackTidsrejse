@@ -10,6 +10,10 @@ public class Kunder {
         this.email = email;
         this.id = id;
     }
+    public Kunder(String navn, String email) {
+        this.navn = navn;
+        this.email = email;
+    }
 
     public String getNavn() {
         return navn;
